@@ -55,7 +55,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap = googleMap
         mMap.uiSettings.isMyLocationButtonEnabled=true
         //Compruebo los permisos
-        comprobarPermisos()
+        enableMyLocation()
         //Hago visible los botones para apliar y desampliar el mapa
         mMap.uiSettings.isZoomControlsEnabled=true
         //Creo una variable con una latitud y longitud
@@ -66,7 +66,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.moveCamera(CameraUpdateFactory.newLatLng(centro))
     }
 
-    private fun comprobarPermisos(){
+    private fun comprobarPermisos(): Boolean {
         //Cuando
         when{
             //Si tengo permisos que me diga que tengo permisos
@@ -74,15 +74,18 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 android.Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED->{
                 Log.i("Permisos","permiso garantozado")
                 mensajeUsuario("Tienes Permisos")
+                return true
                 }
             //Si no los tengo por que los denegue que me salte un mensaje donde me diga que de los permisos en ajustes
             shouldShowRequestPermissionRationale (Manifest.permission.ACCESS_FINE_LOCATION
             )->{
                 mensajeUsuario("Da permisos en ajustes")
+                return false
             }
             //La Primera vez que me pide los permisos  tengo la opcion de aceptar o no
             else->{
                 requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),PERMISO_LOCALIZACION)
+                return false
             }
         }
     }
@@ -109,5 +112,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     fun mensajeUsuario(mensaje:String){
         Toast.makeText(this,mensaje,Toast.LENGTH_LONG).show()
     }
+    //con este metodo compruebo que se inicialice el mapa y hago la comprobacion de permisos
+    @SuppressLint("MissingPermission")
+    private fun enableMyLocation(){
+        if(!::mMap.isInitialized) return
+        if(comprobarPermisos()){
+            mMap.isMyLocationEnabled = true
+        } else{
+            comprobarPermisos()
+        }
+    }
+
 
 }
