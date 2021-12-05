@@ -53,6 +53,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     @RequiresApi(Build.VERSION_CODES.N)
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
+        mMap.uiSettings.isMyLocationButtonEnabled=true
+        //Compruebo los permisos
         comprobarPermisos()
         //Hago visible los botones para apliar y desampliar el mapa
         mMap.uiSettings.isZoomControlsEnabled=true
@@ -65,22 +67,26 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun comprobarPermisos(){
+        //Cuando
         when{
+            //Si tengo permisos que me diga que tengo permisos
             ContextCompat.checkSelfPermission(this,
                 android.Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED->{
                 Log.i("Permisos","permiso garantozado")
                 mensajeUsuario("Tienes Permisos")
                 }
+            //Si no los tengo por que los denegue que me salte un mensaje donde me diga que de los permisos en ajustes
             shouldShowRequestPermissionRationale (Manifest.permission.ACCESS_FINE_LOCATION
             )->{
                 mensajeUsuario("Da permisos en ajustes")
             }
+            //La Primera vez que me pide los permisos  tengo la opcion de aceptar o no
             else->{
                 requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),PERMISO_LOCALIZACION)
             }
         }
     }
-
+    //Con esta funcion Compruebo que le di correctamente lso permisos
     @SuppressLint("MissingPermission")
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -88,17 +94,18 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         grantResults: IntArray
     ) {
         when(requestCode){
-            PERMISO_LOCALIZACION->{
+            PERMISO_LOCALIZACION->{ //Conpruebo si mi permiso no esta vacio y fue dado
                 if(grantResults.isNotEmpty() && grantResults[0]==PackageManager.PERMISSION_GRANTED){
-                    mMap.isMyLocationEnabled = true
+                    mMap.isMyLocationEnabled = true //que me muestre en el mapa
                 }
             }
+            //Para los demas permisos
             else->{
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults)
             }
         }
     }
-
+    //Funcion para mostrar mensajes al usuario
     fun mensajeUsuario(mensaje:String){
         Toast.makeText(this,mensaje,Toast.LENGTH_LONG).show()
     }
