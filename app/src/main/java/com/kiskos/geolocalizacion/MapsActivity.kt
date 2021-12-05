@@ -39,10 +39,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
      */
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-
-        // Add a marker in Sydney and move the camera
-        val sydney = LatLng(-34.0, 151.0)
-        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+        //Creo una variable con una latitud y longitud
+        val centro = LatLng(42.23656846001073, -8.714151073325072)
+        //Añado al mapa una marca a partir de la variable anterior y le añado un titulo
+        mMap.addMarker(MarkerOptions().position(centro).title("Centro de explotacion legal"))
+        //Le digo al mapa que centre la camara en el punto
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(centro))
     }
 }
