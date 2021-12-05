@@ -39,6 +39,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
      */
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
+        //Hago visible los botones para apliar y desampliar el mapa
+        mMap.uiSettings.isZoomControlsEnabled=true
         //Creo una variable con una latitud y longitud
         val centro = LatLng(42.23656846001073, -8.714151073325072)
         //Añado al mapa una marca a partir de la variable anterior y le añado un titulo
